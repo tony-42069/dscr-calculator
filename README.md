@@ -1,5 +1,3 @@
-# Saving the README content into a .md file
-readme_content = """
 # Business Acquisition Analyzer
 
 ## Overview
@@ -49,9 +47,3 @@ The analyzer evaluates the deal by taking into account several factors such as D
 3. Review the **Financial Analysis**, **Acquisition Analysis**, and the deal indicator to determine if the acquisition is worth pursuing.
 4. Follow up on due diligence recommendations for deeper insights into the business acquisition.
 """
-
-# Save the markdown content into a file
-with open("/mnt/data/Business_Acquisition_Analyzer_README.md", "w") as f:
-    f.write(readme_content)
-
-"/mnt/data/Business_Acquisition_Analyzer_README.md"
