@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Acquisition Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #031b30;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ddd8cb;
+        }
+        .calculator {
+            background-color: #3079b1;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #031b30;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3079b1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #031b30;
+        }
+        #result, #analysis {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ddd8cb;
+            border-radius: 4px;
+        }
+        #analysis {
+            background-color: #a7713b;
+            color: white;
+        }
+        #dealIndicator {
+            font-size: 86px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Business Acquisition Analyzer</h1>
+        
+        <label for="purchasePrice">Purchase Price ($):</label>
+        <input type="number" id="purchasePrice" min="0" step="100000" required>
+        
+        <label for="downPayment">Down Payment (%):</label>
+        <input type="number" id="downPayment" min="0" max="100" step="1" required>
+        
+        <label for="loanTerm">Loan Term (years):</label>
+        <input type="number" id="loanTerm" min="1" max="30" step="1" required>
+        
+        <label for="interestRate">Interest Rate (%):</label>
+        <input type="number" id="interestRate" min="0" max="20" step="0.1" required>
+        
+        <label for="annualRevenue">Current Annual Revenue ($):</label>
+        <input type="number" id="annualRevenue" min="0" step="100000" required>
+        
+        <label for="annualExpenses">Current Annual Expenses ($):</label>
+        <input type="number" id="annualExpenses" min="0" step="100000" required>
+        
+        <label for="revenueGrowth">Projected Annual Revenue Growth (%):</label>
+        <input type="number" id="revenueGrowth" min="-100" max="100" step="1" required>
+        
+        <label for="industryType">Industry Type:</label>
+        <select id="industryType" required>
+            <option value="retail">Retail</option>
+            <option value="service">Service</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="technology">Technology</option>
+            <option value="other">Other</option>
+        </select>
+        
+        <label for="employeeCount">Number of Employees:</label>
+        <input type="number" id="employeeCount" min="0" step="1" required>
+        
+        <label for="yearsOperating">Years in Operation:</label>
+        <input type="number" id="yearsOperating" min="0" step="1" required>
+        
+        <label for="sellerReason">Seller's Reason for Selling:</label>
+        <select id="sellerReason" required>
+            <option value="retirement">Retirement</option>
+            <option value="newOpportunity">New Opportunity</option>
+            <option value="financialDifficulties">Financial Difficulties</option>
+            <option value="relocation">Relocation</option>
+            <option value="other">Other</option>
+        </select>
+        
+        <button onclick="analyzeAcquisition()">Analyze Acquisition</button>
+        
+        <div id="result"></div>
+        <div id="analysis"></div>
+        <div id="dealIndicator"></div>
+    </div>
+
+    <script>
+        function analyzeAcquisition() {
+            // Get input values
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
+            const downPayment = parseFloat(document.getElementById('downPayment').value) / 100;
+            const loanTerm = parseFloat(document.getElementById('loanTerm').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
+            const annualRevenue = parseFloat(document.getElementById('annualRevenue').value);
+            const annualExpenses = parseFloat(document.getElementById('annualExpenses').value);
+            const revenueGrowth = parseFloat(document.getElementById('revenueGrowth').value) / 100;
+            const industryType = document.getElementById('industryType').value;
+            const employeeCount = parseInt(document.getElementById('employeeCount').value);
+            const yearsOperating = parseInt(document.getElementById('yearsOperating').value);
+            const sellerReason = document.getElementById('sellerReason').value;
+
+            // Validate inputs
+            if (isNaN(purchasePrice) || isNaN(downPayment) || isNaN(loanTerm) || isNaN(interestRate) ||
+                isNaN(annualRevenue) || isNaN(annualExpenses) || isNaN(revenueGrowth) || isNaN(employeeCount) || isNaN(yearsOperating)) {
+                document.getElementById('result').innerHTML = '<p class="error">Please fill in all fields with valid numbers.</p>';
+                return;
+            }
+
+            // Calculations
+            const loanAmount = purchasePrice * (1 - downPayment);
+            const monthlyInterestRate = interestRate / 12;
+            const numberOfPayments = loanTerm * 12;
+            const monthlyPayment = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+                                   (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+            const annualDebtService = monthlyPayment * 12;
+            const netIncome = annualRevenue - annualExpenses;
+            const dscr = netIncome / annualDebtService;
+            const roi = (netIncome / purchasePrice) * 100;
+            const paybackPeriod = purchasePrice / netIncome;
+            const equityMultiple = (netIncome * loanTerm + purchasePrice) / (purchasePrice * downPayment);
+            const cashOnCashReturn = (netIncome / (purchasePrice * downPayment)) * 100;
+
+            // Generate result HTML
+            let resultHTML = `
+                <h2>Financial Analysis</h2>
+                <p>Loan Amount: $${loanAmount.toLocaleString()}</p>
+                <p>Monthly Payment: $${monthlyPayment.toFixed(2)}</p>
+                <p>Annual Debt Service: $${annualDebtService.toLocaleString()}</p>
+                <p>Net Income: $${netIncome.toLocaleString()}</p>
+                <p>Debt Service Coverage Ratio (DSCR): ${dscr.toFixed(2)}</p>
+                <p>Return on Investment (ROI): ${roi.toFixed(2)}%</p>
+                <p>Payback Period: ${paybackPeriod.toFixed(2)} years</p>
+                <p>Equity Multiple: ${equityMultiple.toFixed(2)}x</p>
+                <p>Cash-on-Cash Return: ${cashOnCashReturn.toFixed(2)}%</p>
+            `;
+            document.getElementById('result').innerHTML = resultHTML;
+
+            // Generate analysis HTML
+            let analysisHTML = '<h2>Acquisition Analysis</h2>';
+            let dealScore = 0;
+
+            // DSCR Analysis
+            if (dscr < 1.15) {
+                analysisHTML += `<p>The DSCR of ${dscr.toFixed(2)} is concerning. It indicates that the business may struggle to cover its debt obligations.</p>`;
+            } else if (dscr >= 1.15 && dscr < 1.35) {
+                analysisHTML += `<p>The DSCR of ${dscr.toFixed(2)} is acceptable but leaves little room for error. Consider ways to improve cash flow.</p>`;
+                dealScore += 1;
+            } else {
+                analysisHTML += `<p>The DSCR of ${dscr.toFixed(2)} is strong, indicating the business should comfortably cover its debt obligations.</p>`;
+                dealScore += 2;
+            }
+
+            // ROI Analysis
+            if (roi < 10) {
+                analysisHTML += `<p>The ROI of ${roi.toFixed(2)}% is low. Consider negotiating a better purchase price or finding ways to increase profitability.</p>`;
+            } else if (roi >= 10 && roi < 20) {
+                analysisHTML += `<p>The ROI of ${roi.toFixed(2)}% is moderate. It's in line with many small business acquisitions but there may be room for improvement.</p>`;
+                dealScore += 1;
+            } else {
+                analysisHTML += `<p>The ROI of ${roi.toFixed(2)}% is attractive, suggesting a potentially lucrative investment.</p>`;
+                dealScore += 2;
+            }
+
+            // Industry and Business Specific Analysis
+            analysisHTML += `<p>This ${industryType} business has been operating for ${yearsOperating} years with ${employeeCount} employees. `;
+            if (yearsOperating < 3) {
+                analysisHTML += `The short operational history increases risk. Thoroughly verify all financial information.</p>`;
+            } else if (yearsOperating >= 3 && yearsOperating < 10) {
+                analysisHTML += `The business has a reasonable track record, but ensure you understand its growth trajectory and market position.</p>`;
+                dealScore += 1;
+            } else {
+                analysisHTML += `The long operational history suggests stability, but verify that the business has kept up with industry trends.</p>`;
+                dealScore += 2;
+            }
+
+            analysisHTML += `<p>The seller's reason for selling (${sellerReason}) is ${sellerReason === 'financialDifficulties' ? 'a potential red flag. Investigate thoroughly.' : 'common in business sales. Verify the reason and ensure a smooth transition is possible.'}`;
+            
+            analysisHTML += `<p>Additional due diligence recommendations:
+                             <br>- Review detailed financial statements and tax returns for the past 3-5 years
+                             <br>- Analyze customer concentration and relationships
+                             <br>- Evaluate the strength and transferability of supplier relationships
+                             <br>- Assess the management team and key employees
+                             <br>- Review all contracts, leases, and legal obligations
+                             <br>- Investigate any pending legal issues or liabilities
+                             <br>- Conduct a thorough market analysis to understand competitive positioning</p>`;
+
+            document.getElementById('analysis').innerHTML = analysisHTML;
+
+            // Deal Indicator
+            let indicator = '';
+            if (dealScore >= 5 && dscr >= 1.35 && roi >= 20) {
+                indicator = '✅'; // Green check mark
+            } else if (dealScore >= 3 && dscr >= 1.15 && roi >= 10) {
+                indicator = '⚠️'; // Yellow warning sign
+            } else {
+                indicator = '❌'; // Red X
+            }
+            document.getElementById('dealIndicator').innerHTML = indicator;
+        }
+    </script>
+</body>
+</html>
