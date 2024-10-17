@@ -1,4 +1,4 @@
-# # ["Will this buy fly?"™ ](https://incomparable-taiyaki-55b0b3.netlify.app/) 
+# ["Will this buy fly?"™ ](https://incomparable-taiyaki-55b0b3.netlify.app/) 
 
 ## Overview
 The **Business Acquisition Analyzer** is a tool designed to evaluate potential business acquisitions by analyzing key financial and operational factors. The tool helps investors, business owners, and brokers assess the financial feasibility and attractiveness of acquiring a business based on inputs such as purchase price, revenue, expenses, loan terms, and more.
